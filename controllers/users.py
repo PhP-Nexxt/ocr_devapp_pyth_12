@@ -1,7 +1,7 @@
 from sqlalchemy.orm.exc import NoResultFound
 from models.db import session
-from models.models import User
-from views.users import get_user_data, get_user_login_data
+from models.models import User, Client
+from views.users import get_user_data, get_user_login_data, get_client_data
 
 def create_user():
     # Creation du user en recuperant les valeurs input de views.users.py
@@ -21,7 +21,15 @@ def login():
             print("Invalid password !")
     except NoResultFound:
         print("User does not exist !")
+        
+def create_client():
+    # Creation du client  
+    full_name, email, phone_number, company_name, commercial_id = get_client_data()
+    new_client = Client(full_name=full_name, email=email, phone_number=phone_number, company_name=company_name, commercial_id=commercial_id)
+    session.add(new_client)
+    session.commit()
  
 def start():
     # create_user()
-    login()
+    # login()
+    create_client()
