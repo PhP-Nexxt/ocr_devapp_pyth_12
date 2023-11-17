@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Text
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import validates, relationship
@@ -47,6 +47,33 @@ class Client(Base):
     commercial = relationship("User") # Lien avec la classe User
     commercial_id = Column(Integer, ForeignKey("user.id")) # Ref a la table user
     
+class Contrat(Base):
+    __tablename__ = 'contrat'
+    id = Column(Integer, primary_key=True)
+    client = relationship("Client") # Lien avec la class Client
+    client_id = Column(Integer, ForeignKey("client.id")) # Ref a la table client
+    commercial = relationship("User") # Lien avec la classe User
+    commercial_id = Column(Integer, ForeignKey("user.id")) # Ref a la table user
+    amount = Column(Integer, nullable=False) # Montant du contrat
+    rest_amount = Column(Integer, nullable=False) # Montant restant du
+    created_at = Column(DateTime, default=datetime.now) # Prend la date actuelle
+    status = Column(Boolean, default=False) # Contrat signe ou pas
+    
+class Event(Base):
+    __tablename__ = 'event'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    contrat = relationship("Contrat") # Lien avec la class Contrat
+    contrat_id = Column(Integer, ForeignKey("contrat.id")) # Ref a la table contrat
+    client = relationship("Client") # Lien avec la class Client
+    client_id = Column(Integer, ForeignKey("client.id")) # Ref a la table client
+    start_at = Column(DateTime, nullable=True)
+    end_at = Column(DateTime, nullable=True)
+    support = relationship("User") # Lien avec la classe User
+    support_id = Column(Integer, ForeignKey("user.id")) # Ref a la table user
+    location = Column(String, nullable=True)
+    attendees = Column(Integer, default=0)
+    notes = Column(Text, nullable=True)
     
 
 

@@ -27,3 +27,23 @@ def get_client_data():
     company_name = input("company : " )
     commercial_id = input("commercial : " )
     return full_name, email, phone_number, company_name, commercial_id
+
+def get_contrat_data():
+    client_id = input("Entrez Id du client : " )
+    commercial_id = input("Entrez Id du commercial : " )
+    amount = input("Montant du contrat : " )
+    rest_amount = input("Reste a payer du contrat : " )
+    return client_id, commercial_id, amount, rest_amount
+
+def get_event_data():
+    name = input("Entrez le nom de l'evenement : ")
+    contrat_id = input("Entrez Id du commercial : " )
+    client_id = input("Entrez Id du client : " )
+    support_id = input("Entrez Id du support : ")
+    location = input("Entrez adresse de l'evenement : ")
+    attendees = input("Nombre d'invités : ")
+    notes = input("Entrez vos notes : ")
+    return name, contrat_id, client_id, support_id, location, attendees, notes
+    
+    
+    
