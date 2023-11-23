@@ -29,7 +29,7 @@ def login():
             print("User does not exist !")
             return None
         
-SESSION_FILE = "session.pkl" #sauvergarde la session sur la machine (pas Cookie)
+SESSION_FILE = "session.pkl" #sauvergarde la session sur la machine(pas Cookie)
 
 def logout():
     if os.path.exists(SESSION_FILE):
