@@ -1,6 +1,6 @@
 from models.db import engine, session
 from models.models import meta_base, User
-from controllers.main_controllers import start
+from controllers.main_controllers import MainController
 
 # Epic_event_postgresql
 # Pw 12345678
@@ -23,4 +23,4 @@ from controllers.main_controllers import start
 
 if __name__ == "__main__": # A approfondir
     meta_base.create_all(engine) 
-    start() # Appel fonction start du controllers.py
+    MainController().start() # Appel class MainControleur puis fonction start

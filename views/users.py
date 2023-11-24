@@ -22,12 +22,6 @@ def get_user_login_data():
     password = input("Entrez votre Pw : ")
     return name, password
 
-def get_client_data():
-    full_name = input("full name : " )
-    email = input("email : " )
-    phone_number = input("phone number : " )
-    company_name = input("company : " )
-    return full_name, email, phone_number, company_name
 
 def get_contrat_data():
     client_id = input("Entrez Id du client : " )
