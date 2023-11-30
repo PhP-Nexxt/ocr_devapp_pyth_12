@@ -1,13 +1,20 @@
 from .auth import login, logout, create_user
-from .contrats import create_contrat, create_event
 from views.menu import app_menu
 from .clients import ClientControler
+from .contrats import ContratsControllers
+from .event import EventController
 from views.clients import ClientView 
+from views.contrats import ContratView
+from views.event import EventView
 
 class MainController:
     def __init__(self):
         self.client_view = ClientView()
+        self.contrat_view = ContratView()
+        self.event_view = EventView()
         self.client_controller = ClientControler()
+        self.contrat_controller = ContratsControllers()
+        self.event_controller = EventController()
         
     def start(self):
         choice = app_menu() # Appel au menu de view
@@ -18,9 +25,9 @@ class MainController:
         elif choice == 3:
             self.clients_menu()
         elif choice == 4:
-            create_contrat()
+            self.contrats_menu()
         elif choice == 5:
-            create_event()
+            self.event_menu()
         elif choice == 6:
             logout()
         else:
@@ -33,9 +40,31 @@ class MainController:
         elif choice == 2:
             self.client_controller.display_clients()
         elif choice == 3:
-            print("Modifier un client")
+            self.client_controller.update_clients() # Appel fonction update
         elif choice == 4:
-            print("Supprimer un client")
+            self.start()
+            
+    def contrats_menu(self):
+        choice = self.contrat_view.contrat_menu()
+        if choice == 1:
+            self.contrat_controller.create_contrat()
+        elif choice == 2:
+            self.contrat_controller.display_contrats()
+        elif choice == 3:
+            self.contrat_controller.update_contrat()
+        elif choice == 4:
+            self.start()
+            
+    def event_menu(self):
+        choice = self.event_view.event_menu()
+        if choice == 1:
+            self.event_controller.create_event()
+        elif choice == 2:
+            self.event_controller.display_event()
+        elif choice == 3:
+            pass
+        elif choice == 4:
+            self.event_controller.assign_user_support_to_event()
         elif choice == 5:
             self.start()
         

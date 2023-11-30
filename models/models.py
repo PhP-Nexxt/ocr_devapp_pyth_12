@@ -70,7 +70,7 @@ class Event(Base):
     start_at = Column(DateTime, nullable=True)
     end_at = Column(DateTime, nullable=True)
     support = relationship("User") # Lien avec la classe User
-    support_id = Column(Integer, ForeignKey("user.id")) # Ref a la table user
+    support_id = Column(Integer, ForeignKey("user.id"), nullable=True) # Ref a la table user
     location = Column(String, nullable=True)
     attendees = Column(Integer, default=0)
     notes = Column(Text, nullable=True)
