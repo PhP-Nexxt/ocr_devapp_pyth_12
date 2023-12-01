@@ -30,3 +30,13 @@ class EventView:
     def get_event_support_id(self):
         support_id = int(input("Entre l'identifiant du collaborateur support : "))
         return support_id
+    
+    def get_update_event(self, event):
+        print("tapez Entre pour conserver la valeur sans modification")
+        name = input(f"Nom de l'evenement ({event.name}): ") or event.name
+        location = input(f"Lieu de l'evenement ({event.location}): ") or event.location
+        attendees = input(f"Nombre de participants ({event.attendees}): ") or event.attendees
+        start_at = input(f"Date de debut ({event.start_at}): ") or event.start_at
+        end_at = input(f"Date de fin ({event.end_at}): ") or event.end_at
+        notes = input(f"Notes ({event.notes}): ") or event.notes
+        return name, location, attendees, start_at, end_at, notes

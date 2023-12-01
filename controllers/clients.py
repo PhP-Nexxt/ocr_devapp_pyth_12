@@ -1,16 +1,17 @@
 from models.db import session
 from models.models import Client, Contrat, Event, RoleEnum
 from views.clients import ClientView
-from .auth import load_login_session
+from .auth import Auth
 from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy import exc
 
 class ClientControler:
     def __init__(self):
         self.client_view = ClientView()
+        self.auth = Auth()
         
     def create_client(self):
-        current_user = load_login_session()
+        current_user = self.auth.load_login_session()
         # Verification du log et du role
         if current_user:
             # Verification du role commercial
@@ -28,7 +29,7 @@ class ClientControler:
             print("Vous n'etes pas authentifié ")
             
     def display_clients(self):
-        current_user = load_login_session()
+        current_user = self.auth.load_login_session()
         clients = session.query(Client).filter_by(commercial_id=current_user.id)
         self.client_view.display_clients(clients) # Recupere les clients pour la view
 

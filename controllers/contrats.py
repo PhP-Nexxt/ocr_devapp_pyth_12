@@ -1,15 +1,16 @@
 from models.db import session
 from models.models import Client, Contrat, Event, RoleEnum
 from views.contrats import ContratView
-from .auth import load_login_session
+from .auth import Auth
 from sqlalchemy import exc
 
 class ContratsControllers:
     def __init__(self):
         self.contrat_view = ContratView()
+        self.auth = Auth()
 
     def create_contrat(self):
-        current_user = load_login_session()
+        current_user = self.auth.load_login_session()
         commercial_id = current_user.id
         # Creation du contrat  
         client_id, amount, rest_amount = self.contrat_view.get_contrat_data()
@@ -18,7 +19,7 @@ class ContratsControllers:
         session.commit()
         
     def display_contrats(self):
-        current_user = load_login_session()
+        current_user = self.auth.load_login_session()
         contrats = session.query(Contrat).filter_by(commercial_id=current_user.id)
         self.contrat_view.display_contrats(contrats) # Recupere les contrats pour la view
 

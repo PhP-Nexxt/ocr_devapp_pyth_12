@@ -1,4 +1,4 @@
-from .auth import login, logout, create_user
+from .auth import Auth
 from views.menu import app_menu
 from .clients import ClientControler
 from .contrats import ContratsControllers
@@ -6,6 +6,8 @@ from .event import EventController
 from views.clients import ClientView 
 from views.contrats import ContratView
 from views.event import EventView
+from .users import UserController
+from views.users import UserView
 
 class MainController:
     def __init__(self):
@@ -15,13 +17,16 @@ class MainController:
         self.client_controller = ClientControler()
         self.contrat_controller = ContratsControllers()
         self.event_controller = EventController()
+        self.auth = Auth()
+        self.user_controller = UserController()
+        self.user_view = UserView()
         
     def start(self):
         choice = app_menu() # Appel au menu de view
         if choice == 1:
-            login()
+            self.auth.login()
         elif choice == 2:
-            create_user()
+            self.user_menu()
         elif choice == 3:
             self.clients_menu()
         elif choice == 4:
@@ -29,10 +34,21 @@ class MainController:
         elif choice == 5:
             self.event_menu()
         elif choice == 6:
-            logout()
+            self.auth.logout()
         else:
             print("Choix incorect !")
             
+    def user_menu(self):
+        choice = self.user_view.user_menu()
+        if choice == 1:
+            self.user_controller.create_user()
+        elif choice == 2:
+            pass
+        elif choice == 3:
+            pass
+        elif choice == 4:
+            self.start()
+    
     def clients_menu(self):
         choice = self.client_view.clients_menu()
         if choice == 1:
@@ -62,7 +78,7 @@ class MainController:
         elif choice == 2:
             self.event_controller.display_event()
         elif choice == 3:
-            pass
+            self.event_controller.update_event()
         elif choice == 4:
             self.event_controller.assign_user_support_to_event()
         elif choice == 5:
