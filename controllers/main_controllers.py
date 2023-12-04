@@ -43,10 +43,12 @@ class MainController:
         if choice == 1:
             self.user_controller.create_user()
         elif choice == 2:
-            pass
+            self.user_controller.display_users()
         elif choice == 3:
-            pass
+            self.user_controller.update_user()
         elif choice == 4:
+            self.user_controller.delete_user()
+        elif choice == 5:
             self.start()
     
     def clients_menu(self):
