@@ -4,32 +4,29 @@ from views.clients import ClientView
 from .auth import Auth
 from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy import exc
+from .utils import login_required, commercial_required
 
 class ClientControler:
     def __init__(self):
         self.client_view = ClientView()
         self.auth = Auth()
-        
+    
+    @login_required
+    @commercial_required # Appel au decorateur   
     def create_client(self):
-        current_user = self.auth.load_login_session()
-        # Verification du log et du role
-        if current_user:
-            # Verification du role commercial
-            if current_user.role==RoleEnum.COMMERCIAL.value:
-                # Creation du client  
-                full_name, email, phone_number, company_name = self.client_view.get_client_data()
-                # Appel du commercial
-                commercial_id = current_user.id
-                new_client = Client(full_name=full_name, email=email, phone_number=phone_number, company_name=company_name, commercial_id=commercial_id)
-                session.add(new_client)
-                session.commit()
-            else:
-                print("Vous n'etes pas commercial ")
-        else:
-            print("Vous n'etes pas authentifié ")
-            
+        current_user = self.auth.get_current_user() 
+        # Creation du client  
+        full_name, email, phone_number, company_name = self.client_view.get_client_data()
+        # Appel du commercial
+        commercial_id = current_user.id
+        new_client = Client(full_name=full_name, email=email, phone_number=phone_number, company_name=company_name, commercial_id=commercial_id)
+        session.add(new_client)
+        session.commit()
+    
+    
+    @login_required # Appel decorateur     
     def display_clients(self):
-        current_user = self.auth.load_login_session()
+        current_user = self.auth.get_current_user()
         clients = session.query(Client).filter_by(commercial_id=current_user.id)
         self.client_view.display_clients(clients) # Recupere les clients pour la view
 

@@ -45,6 +45,7 @@ class MainController:
         elif choice == 2:
             self.user_controller.display_users()
         elif choice == 3:
+            
             self.user_controller.update_user()
         elif choice == 4:
             self.user_controller.delete_user()

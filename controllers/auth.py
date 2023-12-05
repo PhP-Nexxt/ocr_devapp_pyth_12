@@ -3,7 +3,7 @@ from models.db import session
 from models.models import User
 import pickle, os # PicklE > sauvegarde une cle de session
 from views.users import UserView
-
+from models.models import RoleEnum
 
 SESSION_FILE = "session.pkl" #sauvergarde la session sur la machine(pas Cookie)
 class Auth:
@@ -12,7 +12,7 @@ class Auth:
         self.user_view = UserView()
     
     def login(self):
-        existed_user = self.load_login_session() # Verification si loggé
+        existed_user = self.get_current_user() # Verification si loggé
         if existed_user:
             print("Vous etes deja loggé")
         else:
@@ -36,7 +36,7 @@ class Auth:
         with open(SESSION_FILE, "wb") as file: # wb ecriture
             pickle.dump(user.id, file) # Sauvegarde user dans la session en cours
         
-    def load_login_session(self): # Verifier et Charger si le user auhthentifié 
+    def get_current_user(self): # Verifier et Charger si le user auhthentifié 
         try:
             with open(SESSION_FILE, "rb") as file: # rb lecture
                 user_id = pickle.load(file) # Lecture contenu du fichier (id)
@@ -47,4 +47,32 @@ class Auth:
                     return None
         except FileNotFoundError:
             return None
-            
+    
+    # Creation des roles
+    def is_commercial(self):
+        # Role : Commercial
+        current_user = self.get_current_user()
+        # Verification du log et du role & # Verification du role commercial
+        if current_user and current_user.role==RoleEnum.COMMERCIAL.value:
+            return current_user
+        return None
+        
+    def is_gestion(self):
+        # Role : Gestion
+        current_user = self.get_current_user()
+        # Verification du log et du role & # Verification du role commercial
+        if current_user and current_user.role==RoleEnum.GESTION.value:
+            return current_user
+        return None
+    
+    def is_commercial_or_gestion(self):
+        # Role : Gestion & Commercial
+        return self.is_commercial() or self.is_gestion()
+    
+    def is_support(self):
+        # Role : Support
+        current_user = self.get_current_user()
+        # Verification du log et du role & # Verification du role commercial
+        if current_user and current_user.role==RoleEnum.SUPPORT.value:
+            return current_user
+        return None

@@ -17,7 +17,7 @@ class EventController:
         session.commit()
         
     def display_event(self):
-        current_user = self.auth.load_login_session()
+        current_user = self.auth.get_current_user()
         events = session.query(Event).all()
         self.event_view.display_event(events) # Recupere les events pour la view
         
