@@ -5,10 +5,12 @@ from models.models import User
 import pickle, os # PicklE > sauvegarde une cle de session
 from views.users import UserView
 from .utils import login_required, gestion_required
+from .auth import Auth
 
 class UserController:
     def __init__(self):
         self.user_view = UserView()
+        self.auth = Auth()
 
     @login_required
     @gestion_required

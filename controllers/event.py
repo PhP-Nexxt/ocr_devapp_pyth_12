@@ -1,5 +1,5 @@
 from models.db import session
-from models.models import Client, Contrat, Event, RoleEnum
+from models.models import Contrat, Event
 from .auth import Auth
 from views.event import EventView
 from .utils import login_required, gestion_required, commercial_required, support_required
@@ -21,13 +21,11 @@ class EventController:
     
     @login_required    
     def display_event(self):
-        current_user = self.auth.get_current_user()
         events = session.query(Event).all()
         self.event_view.display_event(events) # Recupere les events pour la view
         
     @login_required    
     def display_event_no_support(self):
-        current_user = self.auth.get_current_user()
         events = session.query(Event).filter_by(support_id = None) # Recupere les evenements non attribués
         if events.count()>0: # Verification de la presence d'events non attribués
             self.event_view.display_event(events) # Recupere les events pour la view
@@ -47,20 +45,33 @@ class EventController:
             session.commit() # Maj base de donnée events
         else:
             print(" Aucun evenement trouvé ")
+            
+    @login_required    
+    def display_support_event(self):
+        current_user = self.auth.get_current_user()
+        events = session.query(Event).filter_by(support_id = current_user.id) # Recupere les evenements attribués au user support
+        if events.count()>0: # Verification de la presence d'events non attribués
+            self.event_view.display_event(events) # Recupere les events pour la view
+            return True
+        else:
+            return False
     
     @login_required
     @support_required   
     def update_event(self):
-        self.display_event() # Appel affichage
-        event_id = self.event_view.get_event_id() # On recupere le choix a modifier via id du client
-        event = session.query(Event).filter_by(id=event_id).first()
-        name, location, attendees, start_at, end_at, notes = self.event_view.get_update_event(event)
-        event.name = name
-        event.location = location
-        event.attendees = attendees
-        event.start_at = start_at
-        event.end_at = end_at
-        event.notes = notes
-        session.commit() # Maj base de donnée clients
+        event_exist = self.display_support_event() # Appel affichage
+        if event_exist:
+            event_id = self.event_view.get_event_id() # On recupere le choix a modifier via id du client
+            event = session.query(Event).filter_by(id=event_id).first()
+            name, location, attendees, start_at, end_at, notes = self.event_view.get_update_event(event)
+            event.name = name
+            event.location = location
+            event.attendees = attendees
+            event.start_at = start_at
+            event.end_at = end_at
+            event.notes = notes
+            session.commit() # Maj base de donnée clients
+        else:
+            print("Aucun évenement trouvé")
         
     

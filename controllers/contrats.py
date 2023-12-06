@@ -1,8 +1,7 @@
 from models.db import session
-from models.models import Client, Contrat, Event, RoleEnum
+from models.models import Contrat, RoleEnum
 from views.contrats import ContratView
 from .auth import Auth
-from sqlalchemy import exc
 from .utils import login_required, gestion_or_commercial_required
 
 class ContratsControllers:
@@ -23,7 +22,6 @@ class ContratsControllers:
     
     @login_required    
     def display_contrats(self):
-        current_user = self.auth.get_current_user()
         contrats = session.query(Contrat).all()
         self.contrat_view.display_contrats(contrats) # Recupere les contrats pour la view
         
