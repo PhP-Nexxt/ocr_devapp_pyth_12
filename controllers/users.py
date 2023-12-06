@@ -4,12 +4,14 @@ from models.db import session
 from models.models import User
 import pickle, os # PicklE > sauvegarde une cle de session
 from views.users import UserView
-
+from .utils import login_required, gestion_required
 
 class UserController:
     def __init__(self):
         self.user_view = UserView()
 
+    @login_required
+    @gestion_required
     def create_user(self):
         # Creation du user en recuperant les valeurs input de views.users.py
         name, lastname, role, password = self.user_view.get_user_data()
@@ -18,11 +20,14 @@ class UserController:
         session.add(new_user)
         session.commit()
         
-    
+    @login_required
+    @gestion_required
     def display_users(self):
         users = session.query(User).all()
         self.user_view.display_user(users) # Recupere les users pour la view
     
+    @login_required
+    @gestion_required
     def update_user(self):
         self.display_users() # Appel affichage
         user_id = self.user_view.get_user_id() # On recupere le choix a modifier via id du user
@@ -36,6 +41,8 @@ class UserController:
             user.set_password(password)
         session.commit() # Maj base de donnée clients
 
+    @login_required
+    @gestion_required
     def delete_user(self):
         self.display_users() # Appel affichage
         user_id = self.user_view.get_user_id() # On recupere le choix a modifier via id du user

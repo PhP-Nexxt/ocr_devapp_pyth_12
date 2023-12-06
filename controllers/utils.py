@@ -1,3 +1,4 @@
+# Création des decorateurs / Gestion droits 
 
 def login_required(func):
     def inner(self):
@@ -5,7 +6,6 @@ def login_required(func):
         # Verification du log et du role
         if current_user:
             result = func(self)
-            print("Je suis dans le decorateur ")
             return result
         else:
             print("Vous n'etes pas authentifié ")
@@ -17,7 +17,6 @@ def gestion_required(func):
         # Verification du log et du role gestion
         if current_user:
             result = func(self)
-            print("Je suis dans le decorateur ")
             return result
         else:
             print("Vous n'etes pas Gestionnaire ")
@@ -29,7 +28,6 @@ def commercial_required(func):
         # Verification du log et du role commercial
         if current_user:
             result = func(self)
-            print("Je suis dans le decorateur ")
             return result
         else:
             print("Vous n'etes pas Commercial ")
@@ -41,7 +39,6 @@ def support_required(func):
         # Verification du log et du role support
         if current_user:
             result = func(self)
-            print("Je suis dans le decorateur ")
             return result
         else:
             print("Vous n'etes pas de l'équipe support ")
@@ -53,7 +50,6 @@ def gestion_or_commercial_required(func):
         # Verification du log et du role support
         if current_user:
             result = func(self)
-            print("Je suis dans le decorateur ")
             return result
         else:
             print("Vous n'etes pas de l'équipe Support ou Commercial")

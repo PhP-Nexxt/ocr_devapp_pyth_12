@@ -30,6 +30,8 @@ class ClientControler:
         clients = session.query(Client).filter_by(commercial_id=current_user.id)
         self.client_view.display_clients(clients) # Recupere les clients pour la view
 
+    @login_required
+    @commercial_required
     def update_clients(self):
         self.display_clients() # Appel affichage
         client_id = self.client_view.get_client_id() # On recupere le choix a modifier via id du client
