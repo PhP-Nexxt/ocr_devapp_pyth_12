@@ -1,3 +1,4 @@
+from controllers.validators import str_input, int_input
 
 
 class ContratView:
@@ -9,7 +10,7 @@ class ContratView:
         print("2. Afficher la liste des contrats : ")
         print("3. Modifier un contrat : ")
         print("4. Retourner au menu principal : ")
-        return int(input())
+        return int_input("")
     
     def get_contrat_data(self):
         client_id = input("Entrez Id du client : " )
