@@ -1,5 +1,7 @@
 from models.models import RoleEnum
 from controllers.validators import str_input, int_input
+from rich.console import Console
+from rich.table import Table
 
 class UserView:
 
@@ -24,23 +26,30 @@ class UserView:
             print(key+1, role) # Recupere le role de RoleEnum en partant de 1
         choice = int_input("Entrez votre role parmis le choix ci-dessus : ")
         while choice not in [key+1 for key, role in enumerate(role_list)]: # Verification des roles contenus dans RoleEnum
-            choice = input("Entrez un role valide : ")
+            choice = int_input("Entrez un role valide : ")
         role = role_list[choice-1] # Rectification de l'affichage (+1)
         password = str_input("Entrez votre Pw : ")
         return name, lastname, role, password
 
     def get_user_login_data(self):
         # Ici on recupere les informations d'identification du user (formulaire)
-        name = input("Entrez votre nom : " )
-        password = input("Entrez votre Pw : ")
+        name = str_input("Entrez votre nom : " )
+        password = str_input("Entrez votre Pw : ")
         return name, password
     
     def display_user(self, users):
+        table = Table(title="User List") # Affichage Tableau
+        table.add_column("Id", style="magenta")
+        table.add_column("Name", style="magenta")
+        table.add_column("Last Name", style="magenta")
+        table.add_column("Role", style="magenta")
         for user in users:
-            print(user.id, user.name)
-            
+            table.add_row(str(user.id), user.name, user.lastname, user.role)
+        console = Console()
+        console.print(table) 
+           
     def get_user_id(self):
-        choice = int(input("Entrez identifiant du user concerné : "))
+        choice = int_input("Entrez identifiant du user concerné : ")
         return choice
     
     def get_update_user(self, user):

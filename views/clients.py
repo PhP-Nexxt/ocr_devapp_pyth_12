@@ -1,4 +1,7 @@
-from controllers.validators import str_input, int_input
+from controllers.validators import str_input, int_input, email_input
+from rich.console import Console
+from rich.table import Table
+
 
 class ClientView:
     def __init__(self):
@@ -12,25 +15,34 @@ class ClientView:
         return int_input("")
     
     def get_client_data(self):
-        full_name = int_input("full name : " )
-        email = input("email : " )
-        phone_number = input("phone number : " )
-        company_name = int_input("company : " )
+        full_name = str_input("full name : " )
+        email = email_input("email : " )
+        phone_number = str_input("phone number : " )
+        company_name = str_input("company : " )
         return full_name, email, phone_number, company_name
     
     def display_clients(self, clients):
+        
+        table = Table(title="Client List") # Affichage Tableau
+        table.add_column("Id", style="magenta")
+        table.add_column("Name", style="magenta")
         for client in clients:
-            print(client.id, client.full_name)
+            table.add_row(str(client.id), client.full_name)
+        console = Console()
+        console.print(table) 
+        
+        # for client in clients:
+            # print(client.id, client.full_name)
             
     def get_client_id(self):
-        choice = int(input("Entrez identifiant du client concerné : "))
+        choice = int_input("Entrez identifiant du client concerné : ")
         return choice
     
     def get_update_client(self, client):
         print("tapez Entre pour conserver la valeur sans modification")
         full_name = str_input(f"full name ({client.full_name}) : ", updated=True) or client.full_name
-        email = input(f"email ({client.email}) : " ) or client.email
-        phone_number = input(f"phone number ({client.phone_number}) : " ) or client.phone_number
+        email = email_input(f"email ({client.email}) : ", updated=True) or client.email
+        phone_number = str_input(f"phone number ({client.phone_number}) : ", updated=True ) or client.phone_number
         company_name = str_input(f"company ({client.company_name}) : ", updated=True ) or client.company_name
         return full_name, email, phone_number, company_name
     
