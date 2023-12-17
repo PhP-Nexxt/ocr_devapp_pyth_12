@@ -25,13 +25,13 @@ class EventView:
     
     def display_event(self,events):
         table = Table(title="Event List")
-        table.add_column("Id", style="magenta")
-        table.add_column("Name", style="magenta")
-        table.add_column("Location", style="magenta")
-        table.add_column("Attendees", style="magenta")
-        table.add_column("Client Name", style="magenta")
-        table.add_column("Commercial", style="magenta")
-        table.add_column("Support Contact", style="magenta")
+        table.add_column("Id", style="white")
+        table.add_column("Name", style="white")
+        table.add_column("Location", style="white")
+        table.add_column("Attendees", style="white")
+        table.add_column("Client Name", style="white")
+        table.add_column("Commercial", style="white")
+        table.add_column("Support Contact", style="white")
         
         for event in events:
             table.add_row(str(event.id), event.name, event.location, str(event.attendees), event.client.full_name, event.contrat.commercial.name, event.support.name)

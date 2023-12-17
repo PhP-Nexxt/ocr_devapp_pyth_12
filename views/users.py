@@ -39,10 +39,10 @@ class UserView:
     
     def display_user(self, users):
         table = Table(title="User List") # Affichage Tableau
-        table.add_column("Id", style="magenta")
-        table.add_column("Name", style="magenta")
-        table.add_column("Last Name", style="magenta")
-        table.add_column("Role", style="magenta")
+        table.add_column("Id", style="white")
+        table.add_column("Name", style="white")
+        table.add_column("Last Name", style="white")
+        table.add_column("Role", style="white")
         for user in users:
             table.add_row(str(user.id), user.name, user.lastname, user.role)
         console = Console()

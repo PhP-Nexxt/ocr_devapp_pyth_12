@@ -22,9 +22,9 @@ class ContratView:
     
     def display_contrats(self,contrats):
         table = Table(title="Contrat List") # Affichage Tableau
-        table.add_column("Id", style="magenta")
-        table.add_column("Amount", style="magenta")
-        table.add_column("Name", style="magenta")
+        table.add_column("Id", style="white")
+        table.add_column("Amount", style="white")
+        table.add_column("Name", style="white")
         for contrat in contrats:
             table.add_row(str(contrat.id), str(contrat.amount), contrat.client.full_name)
         console = Console()

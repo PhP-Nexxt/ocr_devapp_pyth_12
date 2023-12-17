@@ -22,10 +22,9 @@ class ClientView:
         return full_name, email, phone_number, company_name
     
     def display_clients(self, clients):
-        
         table = Table(title="Client List") # Affichage Tableau
-        table.add_column("Id", style="magenta")
-        table.add_column("Name", style="magenta")
+        table.add_column("Id", style="white")
+        table.add_column("Name", style="white")
         for client in clients:
             table.add_row(str(client.id), client.full_name)
         console = Console()
