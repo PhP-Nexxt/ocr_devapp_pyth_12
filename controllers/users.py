@@ -1,9 +1,11 @@
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import SQLAlchemyError
 from models.db import session
+import sentry_sdk
 from models.models import User
 import pickle, os # PicklE > sauvegarde une cle de session
 from views.users import UserView
+from views.menu import print_message
 from .utils import login_required, gestion_required
 from .auth import Auth
 
@@ -20,7 +22,12 @@ class UserController:
         new_user = User(name=name, lastname=lastname,role=role, password=password)
         new_user.set_password(password)
         session.add(new_user)
-        session.commit()
+        try:
+            session.commit() # Update Database
+            print_message("User has been created")
+        except SQLAlchemyError as e:
+            sentry_sdk.capture_exception(e)
+            print_message("User created error", error=True)
         
     @login_required
     @gestion_required
@@ -41,7 +48,12 @@ class UserController:
         if password: # Si user saisie un PW nouveau > Maj DB sinon rien
             user.password = password
             user.set_password(password)
-        session.commit() # Maj base de donnée clients
+        try:
+            session.commit() # Update Database
+            print_message("User has been updated")
+        except SQLAlchemyError as e:
+            sentry_sdk.capture_exception(e)
+            print_message("User updated error", error=True)
 
     @login_required
     @gestion_required
@@ -52,5 +64,8 @@ class UserController:
         try:
             session.delete(user)
             session.commit()
+            print_message("user deleted")
         except SQLAlchemyError as e:
             print("Impossible de supprimer cet utilisateur. Il est associé une ressource : client, contrat, event")
+            sentry_sdk.capture_exception(e)
+            print_message("Error deleted user", error=True)

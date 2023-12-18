@@ -1,6 +1,9 @@
 from models.db import session
+from sqlalchemy.exc import SQLAlchemyError
+import sentry_sdk
 from models.models import Contrat, RoleEnum
 from views.contrats import ContratView
+from views.menu import print_message
 from .auth import Auth
 from .utils import login_required, gestion_or_commercial_required
 
@@ -18,12 +21,23 @@ class ContratsControllers:
         client_id, amount, rest_amount = self.contrat_view.get_contrat_data()
         new_contrat = Contrat(client_id=client_id, commercial_id=commercial_id, amount=amount, rest_amount=rest_amount)
         session.add(new_contrat)
-        session.commit()
+        try:
+            session.commit()
+            print_message("Le contrat a été crée")
+        except SQLAlchemyError as e:
+            sentry_sdk.capture_exception(e)
+            print_message("Le contrat n'a pas pu etre crée", error=True)
     
-    @login_required    
+    @login_required
+    # Test Sentry    
     def display_contrats(self):
-        contrats = session.query(Contrat).all()
-        self.contrat_view.display_contrats(contrats) # Recupere les contrats pour la view
+        try:
+            contrats = session.query(Contrat).all()
+            self.contrat_view.display_contrats(contrats) # Recupere les contrats pour la view
+        except Exception as e: # Sentry
+            sentry_sdk.capture_exception(e)
+            print_message("Erreur d'affichage", error=True)
+        
         
     @login_required
     @gestion_or_commercial_required    
@@ -49,7 +63,12 @@ class ContratsControllers:
             rest_amount, status = self.contrat_view.get_update_contrat(contrat)
             contrat.rest_amount = rest_amount
             contrat.status = status
-            session.commit() # Maj base de donnée clients
+            try:
+                session.commit() # Update Database
+                print_message("Le contrat a été mis a jour")
+            except SQLAlchemyError as e:
+                sentry_sdk.capture_exception(e)
+                print_message("Le contrat n'a pas pu etre mis a jour", error=True)
         else:
             print("Aucun contrat trouvé ")
 

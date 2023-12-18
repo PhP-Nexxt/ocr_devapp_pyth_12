@@ -24,9 +24,14 @@ class ContratView:
         table = Table(title="Contrat List") # Affichage Tableau
         table.add_column("Id", style="white")
         table.add_column("Amount", style="white")
-        table.add_column("Name", style="white")
+        table.add_column("Rest Amount", style="white")
+        table.add_column("Client Name", style="white")
+        table.add_column("Commercial Name", style="white")
+        table.add_column("Signed", style="green")
+        
         for contrat in contrats:
-            table.add_row(str(contrat.id), str(contrat.amount), contrat.client.full_name)
+            signed = "✅" if contrat.status else "❌" # Affichage Status contrat
+            table.add_row(str(contrat.id), str(contrat.amount), str(contrat.rest_amount), contrat.client.full_name, contrat.commercial.name, signed)
         console = Console()
         console.print(table) 
         

@@ -1,7 +1,10 @@
 from models.db import session
+from sqlalchemy.exc import SQLAlchemyError
+import sentry_sdk
 from models.models import Contrat, Event
 from .auth import Auth
 from views.event import EventView
+from views.menu import print_message
 from .utils import login_required, gestion_required, commercial_required, support_required
 
 class EventController:
@@ -17,7 +20,11 @@ class EventController:
         contrat = session.query(Contrat).filter_by(id=contrat_id).first()
         new_event = Event(name=name, contrat_id=contrat_id, client_id=contrat.client_id, location=location, attendees=attendees, notes=notes)
         session.add(new_event)
-        session.commit()
+        try:
+            session.commit() # Update Database
+        except SQLAlchemyError as e:
+            sentry_sdk.capture_exception(e)
+            print_message("L'evenement pas pu etre crée", error=True)
     
     @login_required    
     def display_event(self):
@@ -42,7 +49,12 @@ class EventController:
             event = session.query(Event).filter_by(id=event_id).first()
             support_id = self.event_view.get_event_support_id()
             event.support_id = support_id
-            session.commit() # Maj base de donnée events
+            try:
+                session.commit() # Update Database
+                print_message("L'evenement a bien été assigné au User")
+            except SQLAlchemyError as e:
+                sentry_sdk.capture_exception(e)
+                print_message("Le user support n'a pas pu etre ajouté", error=True)
         else:
             print(" Aucun evenement trouvé ")
             
@@ -70,7 +82,12 @@ class EventController:
             event.start_at = start_at
             event.end_at = end_at
             event.notes = notes
-            session.commit() # Maj base de donnée clients
+            try:
+                session.commit() # Update Database
+                print_message("Evenement mis a jour")
+            except SQLAlchemyError as e:
+                sentry_sdk.capture_exception(e)
+                print_message("L'evenement n'a pas pu etre mis a jour", error=True)
         else:
             print("Aucun évenement trouvé")
         

@@ -1,8 +1,10 @@
 from sqlalchemy.orm.exc import NoResultFound
+import sentry_sdk
 from models.db import session
 from models.models import User
 import pickle, os # PicklE > sauvegarde une cle de session
 from views.users import UserView
+from views.menu import print_message
 from models.models import RoleEnum
 
 SESSION_FILE = "session.pkl" #sauvergarde la session sur la machine(pas Cookie)
@@ -14,18 +16,20 @@ class Auth:
     def login(self):
         existed_user = self.get_current_user() # Verification si loggé
         if existed_user:
-            print("Vous etes deja loggé")
+            print_message("Vous etes deja loggé")
         else:
             name, password = self.user_view.get_user_login_data() # Si non > demande authetification
             try:
                 user = session.query(User).filter_by(name=name).one()
                 if user.check_password(password):
                     self.save_login_session(user) #appel de la fonction
+                    print_message("You are logged")
                 else:
-                    print("Invalid password !")
+                    print_message("Invalid password !", error=True) # Sortie red
                     return None
-            except NoResultFound:
-                print("User does not exist !")
+            except NoResultFound as e:
+                sentry_sdk.capture_exception(e)
+                print_message("User does not exist", error=True) # Sortie red
                 return None
 
     def logout(self):
@@ -45,7 +49,8 @@ class Auth:
                     return user
                 else:
                     return None
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            sentry_sdk.capture_exception(e)
             return None
     
     # Creation des roles

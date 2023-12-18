@@ -1,6 +1,9 @@
 from models.db import session
+from sqlalchemy.exc import SQLAlchemyError
+import sentry_sdk
 from models.models import Client
 from views.clients import ClientView
+from views.menu import print_message
 from .auth import Auth
 from .utils import login_required, commercial_required
 
@@ -19,8 +22,12 @@ class ClientControler:
         commercial_id = current_user.id
         new_client = Client(full_name=full_name, email=email, phone_number=phone_number, company_name=company_name, commercial_id=commercial_id)
         session.add(new_client)
-        session.commit()
-    
+        try:
+            session.commit()
+            print_message("Client crée avec succes")
+        except SQLAlchemyError as e:
+            sentry_sdk.capture_exception(e)
+            print_message("La creation du client a échoué veuillez reesayer plus tard", error=True) # Sortie red
     
     @login_required # Appel decorateur     
     def display_clients(self):
@@ -49,7 +56,10 @@ class ClientControler:
             client.email = email
             client.phone_number = phone_number
             client.company_name = company_name
-            session.commit() # Maj base de donnée clients
+            try:
+                session.commit() # Update
+            except SQLAlchemyError as e:
+                sentry_sdk.capture_exception(e)
         else:
-            print("Aucun client trouvé")
+            print_message("Aucun client trouvé", error=True)
     
