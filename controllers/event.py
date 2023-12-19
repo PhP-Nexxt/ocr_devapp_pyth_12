@@ -18,13 +18,16 @@ class EventController:
         # Creation evenement
         name, contrat_id, location, attendees, notes = self.event_view.get_event_data()
         contrat = session.query(Contrat).filter_by(id=contrat_id).first()
-        new_event = Event(name=name, contrat_id=contrat_id, client_id=contrat.client_id, location=location, attendees=attendees, notes=notes)
-        session.add(new_event)
-        try:
-            session.commit() # Update Database
-        except SQLAlchemyError as e:
-            sentry_sdk.capture_exception(e)
-            print_message("L'evenement pas pu etre crée", error=True)
+        if contrat.status:
+            new_event = Event(name=name, contrat_id=contrat_id, client_id=contrat.client_id, location=location, attendees=attendees, notes=notes)
+            session.add(new_event)
+            try:
+                session.commit() # Update Database
+            except SQLAlchemyError as e:
+                sentry_sdk.capture_exception(e)
+                print_message("L'evenement pas pu etre crée", error=True)
+        else:
+            print_message(f"Le contrat {contrat_id} n'est pas signé", error=True)
     
     @login_required    
     def display_event(self):

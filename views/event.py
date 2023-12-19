@@ -33,8 +33,15 @@ class EventView:
         table.add_column("Commercial", style="white")
         table.add_column("Support Contact", style="white")
         
+        table.add_column("Start t", style="white")
+        table.add_column("End at", style="white")
+        
         for event in events:
-            table.add_row(str(event.id), event.name, event.location, str(event.attendees), event.client.full_name, event.contrat.commercial.name, event.support.name)
+            if event.support:
+                support = event.support.name 
+            else:
+                support = "no support"
+            table.add_row(str(event.id), event.name, event.location, str(event.attendees), event.client.full_name, event.contrat.commercial.name, support, str(event.start_at), str(event.end_at))
         console = Console()
         console.print(table) 
         
