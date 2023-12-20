@@ -52,9 +52,9 @@ Placez vous dans le dossier ocr_devapp_pyth_12, puis créez un environnement vir
 
 `python -m venv venv_epic_event`
 
-Ensuite, activez-le sur MacOs/Linux `source venv_gudlft/bin/activate` - ou sur Windows venv_gudlft\scripts\activate.b Installez ensuite les packages requis: pip install -r requierement.txt
+Ensuite, activez-le sur MacOs/Linux `source venv_gudlft/bin/activate` - ou sur Windows venv_gudlft\scripts\activate.b Installez ensuite les packages requis: `pip install -r requierement.txt`
 
-Lancer le programme en utilisant la commande python main.py
+Lancer le programme en utilisant la commande `python main.py`
 
 
 
