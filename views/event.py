@@ -8,6 +8,7 @@ class EventView:
         pass
     
     def event_menu(self):
+        print()
         print("1. Créer un nouvel évenement : ")
         print("2. Afficher la liste des évenements : ")
         print("3. Modifier un évenement : ")

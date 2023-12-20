@@ -8,6 +8,7 @@ class ContratView:
         pass
     
     def contrat_menu(self):
+        print()
         print("1. Creer un nouveau contrat : ")
         print("2. Afficher la liste des contrats : ")
         print("3. Modifier un contrat : ")

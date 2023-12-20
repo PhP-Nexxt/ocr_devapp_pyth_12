@@ -8,6 +8,7 @@ class ClientView:
         pass
     
     def clients_menu(self):
+        print()
         print("1. Creer un nouveau client : ")
         print("2. Afficher la liste des clients : ")
         print("3. Modifier un client : ")

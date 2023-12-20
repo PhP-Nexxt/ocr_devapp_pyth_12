@@ -9,6 +9,7 @@ class UserView:
         pass
     
     def user_menu(self):
+        print()
         print("1. Creer un utilisateur : ")
         print("2. Afficher la liste des utilisateurs : ")
         print("3. Modifier un utilisateur : ")
@@ -18,13 +19,13 @@ class UserView:
     
     def get_user_data(self):
         # Formulaire de saisie puis creation dans controllers.users.py
-        name = str_input("Entrez votre Prenom : ") # Lien avec validators
-        lastname = str_input("Entrez votre nom : ")
+        name = str_input("Entrez le Prenom de l'utilisateur : ") # Lien avec validators
+        lastname = str_input("Entrez le nom de l'utilisateur : ")
         print()
         role_list = [e.value for e in RoleEnum]
         for key, role in enumerate(role_list): # key = position dans la liste
             print(key+1, role) # Recupere le role de RoleEnum en partant de 1
-        choice = int_input("Entrez votre role parmis le choix ci-dessus : ")
+        choice = int_input("Entrez son role parmis le choix ci-dessus : ")
         while choice not in [key+1 for key, role in enumerate(role_list)]: # Verification des roles contenus dans RoleEnum
             choice = int_input("Entrez un role valide : ")
         role = role_list[choice-1] # Rectification de l'affichage (+1)

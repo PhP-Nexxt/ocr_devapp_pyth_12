@@ -4,6 +4,7 @@ from controllers.validators import int_input
 
 
 def app_menu():
+    print()
     print("1. Se connecter : ")
     print("2. Gestion des utilisateurs : ")
     print("3. Gestion des clients : ")
